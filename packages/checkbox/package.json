@@ -1,0 +1,34 @@
+{
+  "name": "@anystudio/checkbox",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Rupert Adlmaier <rupert@any.studio>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/js/index.js",
+  "module": "dist/es/index.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/js/index.js"
+    }
+  },
+  "types": "dist/js/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm-run-all build:*",
+    "build:es": "tsc --outDir dist/es --module esnext --declaration false && echo '{\"type\":\"module\"}' > dist/es/package.json",
+    "build:js": "tsc"
+  },
+  "devDependencies": {
+    "npm-run-all": "*",
+    "tslint": "*",
+    "typescript": "*"
+  }
+}
