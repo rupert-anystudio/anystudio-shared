@@ -7,9 +7,15 @@ const camelcase = require("camelcase")
 const decamelize = require("decamelize")
 const allPackageNames = require('../lib/all-package-names')
 
-function returnConfig({ name }) {
+function returnConfig(config) {
+  console.log(config)
+  const { name = '', isJsx = false } = config
   if (!name) return null
+  if (name.length < 3) return null
+  // const nameCleaned = name.replace(/\s/g,'') // remove all whitespaces
   const camelcaseName = camelcase(name)
+  const pascalcaseName = camelcase(name, {pascalCase: true})
+  const functionName = isJsx ? pascalcaseName : camelcaseName
   const decamelizeName = decamelize(name)
   const folderPath = path.join(
     __dirname,
@@ -18,9 +24,12 @@ function returnConfig({ name }) {
     decamelizeName
   )
   return {
-    camelcaseName,
-    decamelizeName,
     name,
+    isJsx,
+    functionName,
+    camelcaseName,
+    pascalcaseName,
+    decamelizeName,
     folderPath,
   }
 }
@@ -31,22 +40,22 @@ function createFolders({ folderPath }) {
   // fs.mkdirSync(path.join(folderPath, 'src'))
 }
 
-function writeReadme({ folderPath, camelcaseName, decamelizeName }) {
-  const content = `# @anystudio/${decamelizeName}\n\n# ${camelcaseName}`
+function writeReadme({ folderPath, decamelizeName, functionName }) {
+  const content = `# @anystudio/${decamelizeName}\n\n# ${functionName}`
   fs.writeFileSync(
     path.join(folderPath, 'README.md'),
     content
   )
 }
 
-function writeEntryFile({ folderPath, camelcaseName }) {
-  const interfaceName = `I${camelcaseName}Props`
+function writeEntryFile({ folderPath, functionName }) {
+  const functionInterface = `${functionName}Props`
   const content = `
-interface ${interfaceName} {
+interface ${functionInterface} {
   name: string
 }
 
-export default function ${camelcaseName}(props:${interfaceName}) {
+export default function ${functionName}(props:${functionInterface}) {
   return true
 }
 `
@@ -122,6 +131,11 @@ inquirer
         if (allPackageNames.includes(value)) return 'Name is already in use'
         return true
       },
+    },
+    {
+      message: 'Is a JSX / React component',
+      name: 'isJsx',
+      type: 'confirm',
     },
   ])
   .then((values) => {
