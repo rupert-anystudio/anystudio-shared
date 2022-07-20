@@ -3,10 +3,12 @@
     "packages/*"
   ],
   "useNx": false,
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "stream": true,
   "bootstrap": {
-    "npmClientArgs": ["--no-package-lock"]
+    "npmClientArgs": [
+      "--no-package-lock"
+    ]
   },
   "useWorkspaces": true,
   "npmClient": "yarn"
