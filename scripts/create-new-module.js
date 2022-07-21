@@ -37,7 +37,7 @@ function returnConfig(config) {
 function createFolders({ folderPath }) {
   if (fs.existsSync(folderPath)) return
   fs.mkdirSync(folderPath)
-  // fs.mkdirSync(path.join(folderPath, 'src'))
+  fs.mkdirSync(path.join(folderPath, 'src'))
 }
 
 function writeReadme({ folderPath, decamelizeName, functionName }) {
@@ -60,7 +60,7 @@ export default function ${functionName}(props:${functionInterface}) {
 }
 `
   fs.writeFileSync(
-    path.join(folderPath, 'index.ts'),
+    path.join(folderPath, 'src', 'index.ts'),
     content
   )
 }
@@ -112,7 +112,7 @@ function writeTypescriptConfig({ folderPath }) {
   "compilerOptions": {
     "outDir": "dist/js"
   },
-  "files": ["index.ts"]
+  "files": ["src/index.ts"]
 }`
   fs.writeFileSync(
     path.join(folderPath, 'tsconfig.json'),
